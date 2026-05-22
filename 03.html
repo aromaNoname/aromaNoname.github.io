@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>03 安心撫慰｜A.N. aroma no-name</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Lora:ital,wght@0,400;1,400&family=Noto+Serif+TC:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --parchment: #F5EDD6;
+      --linen: #E8DCC8;
+      --morning: #C4A882;
+      --warm-stone: #7A6A4F;
+      --dark-wood: #3C2A1E;
+      --fog: #F0E8D4;
+      --sand: #D6C9B0;
+      --driftwood: #A89880;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--parchment);
+      color: var(--warm-stone);
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 300;
+      line-height: 1.9;
+      overflow-x: hidden;
+    }
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 1.4rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(245, 237, 214, 0.93);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--sand);
+    }
+    .nav-back { font-family: 'Lora', serif; font-style: italic; font-size: 0.78rem; color: var(--driftwood); text-decoration: none; letter-spacing: 0.08em; transition: color 0.3s; }
+    .nav-back:hover { color: var(--warm-stone); }
+    .nav-logo { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1rem; color: var(--dark-wood); text-decoration: none; }
+
+    .page-header { padding: 9rem 3rem 4rem; max-width: 780px; margin: 0 auto; }
+    .page-number { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(5rem, 12vw, 9rem); color: var(--linen); line-height: 1; margin-bottom: 0.2rem; }
+    .page-title { font-family: 'Noto Serif TC', serif; font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 400; color: var(--dark-wood); margin-bottom: 0.4rem; }
+    .page-subtitle { font-family: 'Lora', serif; font-style: italic; font-size: 0.9rem; color: var(--driftwood); }
+
+    .photo-full { width: 100%; max-height: 85vh; object-fit: cover; display: block; }
+    .photo-contained { display: block; width: 100%; max-width: 600px; margin: 0 auto; padding: 0 3rem; }
+    .photo-contained img { width: 100%; aspect-ratio: 1 / 1; object-fit: cover; display: block; }
+
+    .music-section { max-width: 620px; margin: 0 auto; padding: 4rem 3rem 3rem; }
+    .music-hint { font-family: 'Lora', serif; font-style: italic; font-size: 0.78rem; color: var(--driftwood); margin-bottom: 1.8rem; letter-spacing: 0.05em; }
+    .music-player-wrap { margin-bottom: 0; }
+    .track-select { display: flex; gap: 2rem; margin-bottom: 1.2rem; }
+    .track-label { font-family: 'Lora', serif; font-style: italic; font-size: 0.82rem; color: var(--sand); cursor: pointer; letter-spacing: 0.05em; transition: color 0.3s; }
+    .track-label.active { color: var(--warm-stone); }
+    .track-label:hover { color: var(--driftwood); }
+    .custom-player { display: flex; align-items: center; gap: 1.2rem; border-bottom: 1px solid var(--sand); padding-bottom: 1rem; }
+    .play-btn { width: 36px; height: 36px; border: 1px solid var(--morning); border-radius: 50%; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.3s ease; }
+    .play-btn:hover { background: var(--morning); }
+    .play-btn svg { width: 12px; height: 12px; fill: var(--morning); margin-left: 2px; transition: fill 0.3s ease; }
+    .play-btn:hover svg { fill: var(--parchment); }
+    .progress-wrap { flex: 1; display: flex; flex-direction: column; gap: 0.4rem; }
+    .progress-bar-bg { width: 100%; height: 1px; background: var(--sand); position: relative; cursor: pointer; }
+    .progress-bar-fill { height: 100%; background: var(--morning); width: 0%; transition: width 0.1s linear; }
+    .time-display { font-family: 'Lora', serif; font-size: 0.68rem; color: var(--driftwood); }
+
+    .text-section { max-width: 620px; margin: 0 auto; padding: 5rem 3rem; }
+    .text-zh-large { font-family: 'Playfair Display', serif; font-style: italic; font-size: clamp(1.3rem, 3vw, 1.8rem); color: var(--dark-wood); line-height: 1.7; margin-bottom: 0.6rem; }
+    .text-en { font-family: 'Lora', serif; font-style: italic; font-size: 0.88rem; color: var(--driftwood); line-height: 1.8; margin-bottom: 1.8rem; }
+    .text-body { font-family: 'Noto Serif TC', serif; font-size: 0.92rem; color: var(--warm-stone); line-height: 2.1; }
+
+    .scent-flow { max-width: 620px; margin: 0 auto; padding: 0 3rem 5rem; }
+    .scent-body { font-family: 'Noto Serif TC', serif; font-size: 0.92rem; color: var(--warm-stone); line-height: 2.1; margin-bottom: 2rem; }
+    .scent-line { font-family: 'Lora', serif; font-style: italic; font-size: 0.82rem; color: var(--driftwood); letter-spacing: 0.08em; border-top: 1px solid var(--sand); padding-top: 1rem; }
+
+    .page-footer { padding: 4rem 3rem 5rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--sand); max-width: 780px; margin: 0 auto; }
+    .footer-link { font-family: 'Lora', serif; font-style: italic; font-size: 0.82rem; color: var(--driftwood); text-decoration: none; letter-spacing: 0.08em; transition: color 0.3s; }
+    .footer-link:hover { color: var(--warm-stone); }
+    .footer-logo { font-family: 'Playfair Display', serif; font-style: italic; font-size: 0.85rem; color: var(--sand); }
+
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.9s ease, transform 0.9s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .page-header { padding: 8rem 1.5rem 3rem; }
+      .photo-contained { padding: 0 1.5rem; }
+      .music-section { padding: 3.5rem 1.5rem 2.5rem; }
+      .text-section { padding: 4rem 1.5rem; }
+      .scent-flow { padding: 0 1.5rem 4rem; }
+      .page-footer { padding: 3rem 1.5rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html#products" class="nav-back">← 四款香氛</a>
+    <a href="index.html" class="nav-logo">A.N. aroma no-name</a>
+  </nav>
+
+  <div class="page-header">
+    <div class="page-number reveal">03</div>
+    <h1 class="page-title reveal">安心撫慰</h1>
+    <p class="page-subtitle reveal">深夜的讀書室</p>
+  </div>
+
+  <img class="photo-full reveal" src="03_p1.jpg" alt="03 安心撫慰">
+
+  <div class="music-section">
+    <p class="music-hint reveal">聽聽看，它的聲音。</p>
+    <div class="music-player-wrap reveal">
+      <div class="track-select">
+        <span class="track-label active" id="label-a" onclick="switchTrack('a')">深夜</span>
+        <span class="track-label" id="label-b" onclick="switchTrack('b')">醒著與睡了</span>
+      </div>
+      <div class="custom-player">
+        <button class="play-btn" id="main-play-btn" onclick="toggleMainPlay()">
+          <svg class="icon-play" viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg>
+          <svg class="icon-pause" viewBox="0 0 10 12" style="display:none"><rect x="0" y="0" width="3" height="12"/><rect x="6" y="0" width="3" height="12"/></svg>
+        </button>
+        <div class="progress-wrap">
+          <div class="progress-bar-bg" onclick="seekMain(event)">
+            <div class="progress-bar-fill" id="fill-main"></div>
+          </div>
+          <span class="time-display" id="time-main">0:00</span>
+        </div>
+      </div>
+    </div>
+    <audio id="audio-a" src="03_music_a.mp3" preload="metadata"></audio>
+    <audio id="audio-b" src="03_music_b.mp3" preload="metadata"></audio>
+  </div>
+
+  <div class="text-section">
+    <p class="text-zh-large reveal">燈還亮著。</p>
+    <p class="text-en reveal">Stay a little longer. The night is safe here.</p>
+    <p class="text-body reveal">其他人都睡了，只剩這一盞燈、這一張桌子。夜深了不代表要結束，有時候最安靜、最像自己的時刻，就在這個沒有人打擾的深夜裡。</p>
+  </div>
+
+  <div class="photo-contained reveal">
+    <img src="03_p2.jpg" alt="03 完整產品照">
+  </div>
+
+  <div class="scent-flow" style="padding-top: 5rem;">
+    <p class="scent-body reveal">從佛手柑的柑橘輕快開場，中段是薰衣草把人慢慢放鬆下來，最後落在廣藿香沉穩的大地氣息裡。</p>
+    <p class="scent-line reveal">佛手柑 → 薰衣草 → 廣藿香</p>
+  </div>
+
+  <div class="photo-contained reveal">
+    <img src="03_p3.jpg" alt="03 俯角">
+  </div>
+
+  <div class="text-section">
+    <p class="text-body reveal">表面的花是繡球花。一小朵一小朵聚在一起，安靜又緊密，像深夜裡那種被好好收著、不會散開的安全感。</p>
+  </div>
+
+  <div class="photo-contained reveal">
+    <img src="03_p4.jpg" alt="03 情境">
+  </div>
+
+  <div class="text-section">
+    <p class="text-body reveal">適合一個人的深夜。讀書、寫字，或只是不想那麼快睡的時候。點燃後等十五到二十分鐘，香氣會慢慢沉下來，把空間安定住。</p>
+  </div>
+
+  <div class="page-footer">
+    <a href="02.html" class="footer-link">← 02 溫暖與放鬆</a>
+    <span class="footer-logo">A.N.</span>
+    <a href="04.html" class="footer-link">04 活力與清新 →</a>
+  </div>
+
+  <script>
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.08 });
+    reveals.forEach(el => observer.observe(el));
+
+    let currentTrack = 'a';
+    const audioA = document.getElementById('audio-a');
+    const audioB = document.getElementById('audio-b');
+    const playBtn = document.getElementById('main-play-btn');
+    const fillMain = document.getElementById('fill-main');
+    const timeMain = document.getElementById('time-main');
+
+    function fmt(s) {
+      if (isNaN(s)) return '0:00';
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60);
+      return m + ':' + (sec < 10 ? '0' : '') + sec;
+    }
+    function currentAudio() { return currentTrack === 'a' ? audioA : audioB; }
+    function setPlayIcon(playing) {
+      playBtn.querySelector('.icon-play').style.display = playing ? 'none' : 'block';
+      playBtn.querySelector('.icon-pause').style.display = playing ? 'block' : 'none';
+    }
+    function toggleMainPlay() {
+      const audio = currentAudio();
+      if (audio.paused) { audio.play().catch(e => console.log(e)); setPlayIcon(true); }
+      else { audio.pause(); setPlayIcon(false); }
+    }
+    function switchTrack(id) {
+      if (id === currentTrack) return;
+      const wasPlaying = !currentAudio().paused;
+      currentAudio().pause();
+      currentAudio().currentTime = 0;
+      currentTrack = id;
+      fillMain.style.width = '0%';
+      timeMain.textContent = '0:00';
+      document.getElementById('label-a').classList.toggle('active', id === 'a');
+      document.getElementById('label-b').classList.toggle('active', id === 'b');
+      if (wasPlaying) { currentAudio().play().catch(e => console.log(e)); setPlayIcon(true); }
+      else { setPlayIcon(false); }
+    }
+    function seekMain(e) {
+      const audio = currentAudio();
+      if (!audio.duration) return;
+      audio.currentTime = (e.offsetX / e.currentTarget.offsetWidth) * audio.duration;
+    }
+    [audioA, audioB].forEach(audio => {
+      audio.addEventListener('timeupdate', () => {
+        if ((currentTrack === 'a' && audio === audioA) || (currentTrack === 'b' && audio === audioB)) {
+          const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+          fillMain.style.width = pct + '%';
+          timeMain.textContent = fmt(audio.currentTime);
+        }
+      });
+      audio.addEventListener('ended', () => { setPlayIcon(false); fillMain.style.width = '0%'; timeMain.textContent = '0:00'; });
+    });
+  </script>
+
+</body>
+</html>
