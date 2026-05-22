@@ -118,7 +118,25 @@
       margin: 0 auto;
       padding: 4rem 3rem 3rem;
     }
-    .music-hint {
+    .music-player-wrap { margin-bottom: 0; }
+    .track-select {
+      display: flex;
+      gap: 2rem;
+      margin-bottom: 1.2rem;
+    }
+    .track-label {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 0.82rem;
+      color: var(--sand);
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: color 0.3s;
+    }
+    .track-label.active {
+      color: var(--warm-stone);
+    }
+    .track-label:hover { color: var(--driftwood); }
       font-family: 'Lora', serif;
       font-style: italic;
       font-size: 0.78rem;
@@ -332,39 +350,27 @@
   <div class="music-section">
     <p class="music-hint reveal">聽聽看，它的聲音。</p>
 
-    <div class="player-block reveal">
-      <p class="player-label">Before the world begins, there is this.</p>
-      <div class="custom-player" id="player-a">
-        <button class="play-btn" onclick="togglePlay('a')">
+    <div class="music-player-wrap reveal">
+      <div class="track-select">
+        <span class="track-label active" id="label-a" onclick="switchTrack('a')">凌晨六點</span>
+        <span class="track-label" id="label-b" onclick="switchTrack('b')">另一種溫度</span>
+      </div>
+      <div class="custom-player">
+        <button class="play-btn" id="main-play-btn" onclick="toggleMainPlay()">
           <svg class="icon-play" viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg>
-          <svg class="icon-pause" viewBox="0 0 10 12"><rect x="0" y="0" width="3" height="12"/><rect x="6" y="0" width="3" height="12"/></svg>
+          <svg class="icon-pause" viewBox="0 0 10 12" style="display:none"><rect x="0" y="0" width="3" height="12"/><rect x="6" y="0" width="3" height="12"/></svg>
         </button>
         <div class="progress-wrap">
-          <div class="progress-bar-bg" onclick="seek('a', event)">
-            <div class="progress-bar-fill" id="fill-a"></div>
+          <div class="progress-bar-bg" id="progress-bg" onclick="seekMain(event)">
+            <div class="progress-bar-fill" id="fill-main"></div>
           </div>
-          <span class="time-display" id="time-a">0:00</span>
+          <span class="time-display" id="time-main">0:00</span>
         </div>
       </div>
-      <audio id="audio-a" src="01_music_a.mp3" preload="none"></audio>
     </div>
 
-    <div class="player-block reveal">
-      <p class="player-label">還有另一個版本。清晨溫度不同。<br><em style="font-size:0.68rem; color: var(--sand);">There is another version of this. Same fragrance. A different light.</em></p>
-      <div class="custom-player" id="player-b">
-        <button class="play-btn" onclick="togglePlay('b')">
-          <svg class="icon-play" viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg>
-          <svg class="icon-pause" viewBox="0 0 10 12"><rect x="0" y="0" width="3" height="12"/><rect x="6" y="0" width="3" height="12"/></svg>
-        </button>
-        <div class="progress-wrap">
-          <div class="progress-bar-bg" onclick="seek('b', event)">
-            <div class="progress-bar-fill" id="fill-b"></div>
-          </div>
-          <span class="time-display" id="time-b">0:00</span>
-        </div>
-      </div>
-      <audio id="audio-b" src="01_music_b.mp3" preload="none"></audio>
-    </div>
+    <audio id="audio-a" src="01_music_a.mp3" preload="metadata"></audio>
+    <audio id="audio-b" src="01_music_b.mp3" preload="metadata"></audio>
   </div>
 
   <!-- 情境文字 -->
@@ -420,50 +426,78 @@
     }, { threshold: 0.08 });
     reveals.forEach(el => observer.observe(el));
 
-    // Audio players
-    const audios = { a: document.getElementById('audio-a'), b: document.getElementById('audio-b') };
-    const fills = { a: document.getElementById('fill-a'), b: document.getElementById('fill-b') };
-    const times = { a: document.getElementById('time-a'), b: document.getElementById('time-b') };
-    const btns = { a: document.querySelector('#player-a .play-btn'), b: document.querySelector('#player-b .play-btn') };
+    // Single player with track switching
+    let currentTrack = 'a';
+    const audioA = document.getElementById('audio-a');
+    const audioB = document.getElementById('audio-b');
+    const playBtn = document.getElementById('main-play-btn');
+    const fillMain = document.getElementById('fill-main');
+    const timeMain = document.getElementById('time-main');
 
     function fmt(s) {
+      if (isNaN(s)) return '0:00';
       const m = Math.floor(s / 60);
       const sec = Math.floor(s % 60);
       return m + ':' + (sec < 10 ? '0' : '') + sec;
     }
 
-    function togglePlay(id) {
-      const audio = audios[id];
-      const other = id === 'a' ? 'b' : 'a';
-      if (!audios[other].paused) {
-        audios[other].pause();
-        btns[other].classList.remove('playing');
-      }
+    function currentAudio() {
+      return currentTrack === 'a' ? audioA : audioB;
+    }
+
+    function setPlayIcon(playing) {
+      playBtn.querySelector('.icon-play').style.display = playing ? 'none' : 'block';
+      playBtn.querySelector('.icon-pause').style.display = playing ? 'block' : 'none';
+    }
+
+    function toggleMainPlay() {
+      const audio = currentAudio();
       if (audio.paused) {
-        audio.play();
-        btns[id].classList.add('playing');
+        audio.play().catch(e => console.log(e));
+        setPlayIcon(true);
       } else {
         audio.pause();
-        btns[id].classList.remove('playing');
+        setPlayIcon(false);
       }
     }
 
-    function seek(id, e) {
-      const bar = e.currentTarget;
-      const ratio = e.offsetX / bar.offsetWidth;
-      audios[id].currentTime = ratio * audios[id].duration;
+    function switchTrack(id) {
+      if (id === currentTrack) return;
+      const wasPlaying = !currentAudio().paused;
+      currentAudio().pause();
+      currentAudio().currentTime = 0;
+      currentTrack = id;
+      fillMain.style.width = '0%';
+      timeMain.textContent = '0:00';
+      document.getElementById('label-a').classList.toggle('active', id === 'a');
+      document.getElementById('label-b').classList.toggle('active', id === 'b');
+      if (wasPlaying) {
+        currentAudio().play().catch(e => console.log(e));
+        setPlayIcon(true);
+      } else {
+        setPlayIcon(false);
+      }
     }
 
-    ['a', 'b'].forEach(id => {
-      audios[id].addEventListener('timeupdate', () => {
-        const pct = audios[id].duration ? (audios[id].currentTime / audios[id].duration) * 100 : 0;
-        fills[id].style.width = pct + '%';
-        times[id].textContent = fmt(audios[id].currentTime);
+    function seekMain(e) {
+      const audio = currentAudio();
+      if (!audio.duration) return;
+      const ratio = e.offsetX / e.currentTarget.offsetWidth;
+      audio.currentTime = ratio * audio.duration;
+    }
+
+    [audioA, audioB].forEach(audio => {
+      audio.addEventListener('timeupdate', () => {
+        if ((currentTrack === 'a' && audio === audioA) || (currentTrack === 'b' && audio === audioB)) {
+          const pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
+          fillMain.style.width = pct + '%';
+          timeMain.textContent = fmt(audio.currentTime);
+        }
       });
-      audios[id].addEventListener('ended', () => {
-        btns[id].classList.remove('playing');
-        fills[id].style.width = '0%';
-        times[id].textContent = '0:00';
+      audio.addEventListener('ended', () => {
+        setPlayIcon(false);
+        fillMain.style.width = '0%';
+        timeMain.textContent = '0:00';
       });
     });
   </script>
