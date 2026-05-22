@@ -233,9 +233,9 @@
       padding: 1.5rem 1.8rem 1.2rem;
     }
     .card-01-header { background: #4B5563; }
-    .card-02-header { background: #F5EDD6; }
+    .card-02-header { background: #C4A882; }
     .card-03-header { background: #1F2937; }
-    .card-04-header { background: #E8E4EF; }
+    .card-04-header { background: #5C5470; }
 
     .product-number {
       font-family: 'Playfair Display', serif;
@@ -255,27 +255,32 @@
     .card-01-header .product-scene,
     .card-03-header .product-scene { color: #E8DCC8; }
     .card-02-header .product-number,
-    .card-02-header .product-name { color: var(--dark-wood); }
-    .card-02-header .product-scene { color: var(--driftwood); }
+    .card-02-header .product-name { color: #3C2A1E; }
+    .card-02-header .product-scene { color: #7A6A4F; }
     .card-04-header .product-number,
-    .card-04-header .product-name { color: #5C5470; }
-    .card-04-header .product-scene { color: #8B809A; }
+    .card-04-header .product-name { color: #F5EDD6; }
+    .card-04-header .product-scene { color: #D6C9B0; }
 
     .product-card-bottom { padding: 1.5rem 1.8rem; }
     .product-copy-zh { font-family: 'Noto Serif TC', serif; font-size: 1.05rem; color: var(--dark-wood); margin-bottom: 0.4rem; }
     .product-copy-en { font-family: 'Lora', serif; font-style: italic; font-size: 0.8rem; color: var(--driftwood); line-height: 1.6; }
 
-    /* PHILOSOPHY */
-    .philosophy { padding: 7rem 3rem; max-width: 780px; margin: 0 auto; }
-    .philosophy-block { margin-bottom: 3.5rem; }
-    .philosophy-block:last-child { margin-bottom: 0; }
+    /* PHILOSOPHY — 過場，不是區塊 */
+    .philosophy {
+      background: var(--fog);
+      padding: 5rem 3rem 6rem;
+      text-align: center;
+      max-width: 100%;
+      margin: 0;
+    }
+    .philosophy-block { margin-bottom: 0; }
     .philosophy-zh {
       font-family: 'Playfair Display', serif;
       font-style: italic;
-      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-      color: var(--dark-wood);
-      margin-bottom: 0.5rem;
-      line-height: 1.7;
+      font-size: clamp(1rem, 2.2vw, 1.25rem);
+      color: var(--driftwood);
+      margin-bottom: 0.6rem;
+      line-height: 1.8;
     }
     .philosophy-en { font-family: 'Lora', serif; font-style: italic; font-size: 0.88rem; color: var(--driftwood); }
     .philosophy-line { width: 1px; height: 50px; background: var(--sand); margin: 2.5rem 0; }
@@ -434,18 +439,8 @@
   </section>
 
   <section class="philosophy">
-    <span class="section-label reveal">Words</span>
     <div class="philosophy-block reveal">
-      <p class="philosophy-zh">有時候不需要做什麼。<br>只是點燃它，然後等雨停。</p>
-    </div>
-    <div class="philosophy-line reveal"></div>
-    <div class="philosophy-block reveal">
-      <p class="philosophy-zh">還沒開始，但某種東西已經在等你了。</p>
-      <p class="philosophy-en">Something is already waiting.</p>
-    </div>
-    <div class="philosophy-line reveal"></div>
-    <div class="philosophy-block reveal">
-      <p class="philosophy-zh">不是所有存在都需要被介紹。<br>有些東西，你進門就會知道。</p>
+      <p class="philosophy-zh">不是所有存在都需要被介紹。<br>有些東西，你點燃就會知道。</p>
       <p class="philosophy-en">Presence needs no introduction.</p>
     </div>
   </section>
