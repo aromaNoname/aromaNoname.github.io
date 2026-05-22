@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>01 淨化與平靜｜A.N. aroma no-name</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Lora:ital,wght@0,400;1,400&family=Noto+Serif+TC:wght@300;400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --parchment: #F5EDD6;
+      --linen: #E8DCC8;
+      --morning: #C4A882;
+      --warm-stone: #7A6A4F;
+      --dark-wood: #3C2A1E;
+      --fog: #F0E8D4;
+      --sand: #D6C9B0;
+      --driftwood: #A89880;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--parchment);
+      color: var(--warm-stone);
+      font-family: 'Noto Serif TC', serif;
+      font-weight: 300;
+      line-height: 1.9;
+      overflow-x: hidden;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 100;
+      padding: 1.4rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(245, 237, 214, 0.93);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--sand);
+    }
+    .nav-back {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 0.78rem;
+      color: var(--driftwood);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      transition: color 0.3s;
+    }
+    .nav-back:hover { color: var(--warm-stone); }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1rem;
+      color: var(--dark-wood);
+      text-decoration: none;
+    }
+
+    /* HERO HEADER */
+    .page-header {
+      padding: 9rem 3rem 4rem;
+      max-width: 780px;
+      margin: 0 auto;
+    }
+    .page-number {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(5rem, 12vw, 9rem);
+      color: var(--linen);
+      line-height: 1;
+      margin-bottom: 0.2rem;
+    }
+    .page-title {
+      font-family: 'Noto Serif TC', serif;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      font-weight: 400;
+      color: var(--dark-wood);
+      margin-bottom: 0.4rem;
+    }
+    .page-subtitle {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--driftwood);
+    }
+
+    /* PHOTO */
+    .photo-full {
+      width: 100%;
+      max-height: 85vh;
+      object-fit: cover;
+      display: block;
+    }
+    .photo-contained {
+      display: block;
+      width: 100%;
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 3rem;
+    }
+    .photo-contained img {
+      width: 100%;
+      display: block;
+    }
+
+    /* MUSIC PLAYER */
+    .music-section {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 4rem 3rem 3rem;
+    }
+    .music-hint {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 0.78rem;
+      color: var(--driftwood);
+      margin-bottom: 1.8rem;
+      letter-spacing: 0.05em;
+    }
+    .player-block {
+      margin-bottom: 2rem;
+    }
+    .player-label {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 0.72rem;
+      color: var(--sand);
+      margin-bottom: 0.6rem;
+      letter-spacing: 0.1em;
+    }
+    .custom-player {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      border-bottom: 1px solid var(--sand);
+      padding-bottom: 1rem;
+    }
+    .play-btn {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--morning);
+      border-radius: 50%;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+    }
+    .play-btn:hover {
+      background: var(--morning);
+    }
+    .play-btn svg {
+      width: 12px;
+      height: 12px;
+      fill: var(--morning);
+      margin-left: 2px;
+      transition: fill 0.3s ease;
+    }
+    .play-btn:hover svg { fill: var(--parchment); }
+    .play-btn.playing svg.icon-play { display: none; }
+    .play-btn.playing svg.icon-pause { display: block !important; }
+    .play-btn svg.icon-pause { display: none; margin-left: 0; }
+
+    .progress-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .progress-bar-bg {
+      width: 100%;
+      height: 1px;
+      background: var(--sand);
+      position: relative;
+      cursor: pointer;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--morning);
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+    .time-display {
+      font-family: 'Lora', serif;
+      font-size: 0.68rem;
+      color: var(--driftwood);
+    }
+
+    /* TEXT SECTIONS */
+    .text-section {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 5rem 3rem;
+    }
+    .text-zh {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 1.15rem;
+      color: var(--dark-wood);
+      line-height: 2;
+      margin-bottom: 0.8rem;
+    }
+    .text-zh-large {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(1.3rem, 3vw, 1.8rem);
+      color: var(--dark-wood);
+      line-height: 1.7;
+      margin-bottom: 0.6rem;
+    }
+    .text-en {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 0.88rem;
+      color: var(--driftwood);
+      line-height: 1.8;
+      margin-bottom: 1.8rem;
+    }
+    .text-body {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.92rem;
+      color: var(--warm-stone);
+      line-height: 2.1;
+    }
+
+    /* SCENT FLOW */
+    .scent-flow {
+      max-width: 620px;
+      margin: 0 auto;
+      padding: 0 3rem 5rem;
+    }
+    .scent-body {
+      font-family: 'Noto Serif TC', serif;
+      font-size: 0.92rem;
+      color: var(--warm-stone);
+      line-height: 2.1;
+      margin-bottom: 2rem;
+    }
+    .scent-line {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 0.82rem;
+      color: var(--driftwood);
+      letter-spacing: 0.08em;
+      border-top: 1px solid var(--sand);
+      padding-top: 1rem;
+    }
+
+    /* DIVIDER LINE */
+    .thin-line {
+      width: 40px;
+      height: 1px;
+      background: var(--sand);
+      margin: 0 3rem 4rem;
+    }
+
+    /* FOOTER NAV */
+    .page-footer {
+      padding: 4rem 3rem 5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid var(--sand);
+      max-width: 780px;
+      margin: 0 auto;
+    }
+    .footer-link {
+      font-family: 'Lora', serif;
+      font-style: italic;
+      font-size: 0.82rem;
+      color: var(--driftwood);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      transition: color 0.3s;
+    }
+    .footer-link:hover { color: var(--warm-stone); }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 0.85rem;
+      color: var(--sand);
+    }
+
+    /* REVEAL */
+    .reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.9s ease, transform 0.9s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    @media (max-width: 768px) {
+      nav { padding: 1.2rem 1.5rem; }
+      .page-header { padding: 8rem 1.5rem 3rem; }
+      .photo-contained { padding: 0 1.5rem; }
+      .music-section { padding: 3.5rem 1.5rem 2.5rem; }
+      .text-section { padding: 4rem 1.5rem; }
+      .scent-flow { padding: 0 1.5rem 4rem; }
+      .thin-line { margin: 0 1.5rem 3rem; }
+      .page-footer { padding: 3rem 1.5rem 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html#products" class="nav-back">← 四款香氛</a>
+    <a href="index.html" class="nav-logo">A.N. aroma no-name</a>
+  </nav>
+
+  <!-- HEADER -->
+  <div class="page-header">
+    <div class="page-number reveal">01</div>
+    <h1 class="page-title reveal">淨化與平靜</h1>
+    <p class="page-subtitle reveal">凌晨六點的寧靜</p>
+  </div>
+
+  <!-- 照片1 主視覺 -->
+  <img class="photo-full reveal" src="01_p1.png" alt="01 淨化與平靜">
+
+  <!-- 音樂 -->
+  <div class="music-section">
+    <p class="music-hint reveal">聽聽看，它的聲音。</p>
+
+    <div class="player-block reveal">
+      <p class="player-label">Before the world begins, there is this.</p>
+      <div class="custom-player" id="player-a">
+        <button class="play-btn" onclick="togglePlay('a')">
+          <svg class="icon-play" viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg>
+          <svg class="icon-pause" viewBox="0 0 10 12"><rect x="0" y="0" width="3" height="12"/><rect x="6" y="0" width="3" height="12"/></svg>
+        </button>
+        <div class="progress-wrap">
+          <div class="progress-bar-bg" onclick="seek('a', event)">
+            <div class="progress-bar-fill" id="fill-a"></div>
+          </div>
+          <span class="time-display" id="time-a">0:00</span>
+        </div>
+      </div>
+      <audio id="audio-a" src="01_music_a.mp3" preload="none"></audio>
+    </div>
+
+    <div class="player-block reveal">
+      <p class="player-label">還有另一個版本。清晨溫度不同。<br><em style="font-size:0.68rem; color: var(--sand);">There is another version of this. Same fragrance. A different light.</em></p>
+      <div class="custom-player" id="player-b">
+        <button class="play-btn" onclick="togglePlay('b')">
+          <svg class="icon-play" viewBox="0 0 10 12"><polygon points="0,0 10,6 0,12"/></svg>
+          <svg class="icon-pause" viewBox="0 0 10 12"><rect x="0" y="0" width="3" height="12"/><rect x="6" y="0" width="3" height="12"/></svg>
+        </button>
+        <div class="progress-wrap">
+          <div class="progress-bar-bg" onclick="seek('b', event)">
+            <div class="progress-bar-fill" id="fill-b"></div>
+          </div>
+          <span class="time-display" id="time-b">0:00</span>
+        </div>
+      </div>
+      <audio id="audio-b" src="01_music_b.mp3" preload="none"></audio>
+    </div>
+  </div>
+
+  <!-- 情境文字 -->
+  <div class="text-section">
+    <p class="text-zh-large reveal">天還沒有完全亮。</p>
+    <p class="text-en reveal">Before the world begins, there is this.</p>
+    <p class="text-body reveal">世界還沒醒，光是灰藍的，空氣是涼的。這是一天裡還沒有被任何事情佔據的那段時間，你還沒開始扮演任何人，只是醒著，安靜地。</p>
+  </div>
+
+  <!-- 照片2 -->
+  <div class="photo-contained reveal">
+    <img src="01_p2.jpg" alt="01 細節">
+  </div>
+
+  <!-- 氣味動線 -->
+  <div class="scent-flow" style="padding-top: 5rem;">
+    <p class="scent-body reveal">從一片清冷的森林開始，草本的氣息慢慢把空氣洗乾淨，最後落在樹脂沉靜的尾韻裡。</p>
+    <p class="scent-line reveal">清冷森林 → 草本淨化 → 樹脂定香</p>
+  </div>
+
+  <!-- 照片3 -->
+  <div class="photo-contained reveal">
+    <img src="01_p3.jpg" alt="01 質感">
+  </div>
+
+  <!-- 適合時刻 -->
+  <div class="text-section">
+    <p class="text-body reveal">適合一天剛開始、或想重新開始的時候。晨起的第一件事，或夜裡需要把思緒清空的時候。點燃後等十五到二十分鐘，香氣會慢慢鋪開，不急。</p>
+  </div>
+
+  <!-- 照片4 -->
+  <img class="photo-full reveal" src="01_p4.jpg" alt="01 情境">
+
+  <!-- 造型說明 -->
+  <div class="text-section">
+    <p class="text-body reveal">表面的花是山茶花。花瓣層層收束，安靜、端正，像清晨那種還沒有聲音的秩序感。</p>
+  </div>
+
+  <!-- 照片5 -->
+  <div class="photo-contained reveal">
+    <img src="01_p5.jpg" alt="01 補充角度">
+  </div>
+
+  <div style="height: 4rem;"></div>
+
+  <!-- 照片6 -->
+  <div class="photo-contained reveal">
+    <img src="01_p6.jpg" alt="01 補充角度">
+  </div>
+
+  <!-- 頁尾 -->
+  <div class="page-footer">
+    <a href="index.html#products" class="footer-link">← 返回四款香氛</a>
+    <span class="footer-logo">A.N.</span>
+    <a href="index.html#contact" class="footer-link">聯絡 →</a>
+  </div>
+
+  <script>
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.08 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Audio players
+    const audios = { a: document.getElementById('audio-a'), b: document.getElementById('audio-b') };
+    const fills = { a: document.getElementById('fill-a'), b: document.getElementById('fill-b') };
+    const times = { a: document.getElementById('time-a'), b: document.getElementById('time-b') };
+    const btns = { a: document.querySelector('#player-a .play-btn'), b: document.querySelector('#player-b .play-btn') };
+
+    function fmt(s) {
+      const m = Math.floor(s / 60);
+      const sec = Math.floor(s % 60);
+      return m + ':' + (sec < 10 ? '0' : '') + sec;
+    }
+
+    function togglePlay(id) {
+      const audio = audios[id];
+      const other = id === 'a' ? 'b' : 'a';
+      if (!audios[other].paused) {
+        audios[other].pause();
+        btns[other].classList.remove('playing');
+      }
+      if (audio.paused) {
+        audio.play();
+        btns[id].classList.add('playing');
+      } else {
+        audio.pause();
+        btns[id].classList.remove('playing');
+      }
+    }
+
+    function seek(id, e) {
+      const bar = e.currentTarget;
+      const ratio = e.offsetX / bar.offsetWidth;
+      audios[id].currentTime = ratio * audios[id].duration;
+    }
+
+    ['a', 'b'].forEach(id => {
+      audios[id].addEventListener('timeupdate', () => {
+        const pct = audios[id].duration ? (audios[id].currentTime / audios[id].duration) * 100 : 0;
+        fills[id].style.width = pct + '%';
+        times[id].textContent = fmt(audios[id].currentTime);
+      });
+      audios[id].addEventListener('ended', () => {
+        btns[id].classList.remove('playing');
+        fills[id].style.width = '0%';
+        times[id].textContent = '0:00';
+      });
+    });
+  </script>
+
+</body>
+</html>
